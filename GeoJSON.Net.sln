@@ -10,11 +10,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.json = global.json
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "GeoJSON.Net", "src\GeoJSON.Net.xproj", "{ACB5B2D2-5344-46C4-847E-38255D296847}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "GeoJSON.Net", "GeoJSON.Net\GeoJSON.Net.xproj", "{ACB5B2D2-5344-46C4-847E-38255D296847}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{888F78A7-C482-4129-BCB0-DB4CAE55B56E}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "GeoJSON.Net.Tests", "test\GeoJSON.Net.Tests.xproj", "{15A09995-21E9-4DFA-B6F7-E0FEA843A8BC}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "GeoJSON.Net.Tests", "GeoJSON.Net.Tests\GeoJSON.Net.Tests.xproj", "{15A09995-21E9-4DFA-B6F7-E0FEA843A8BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
