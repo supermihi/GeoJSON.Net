@@ -1,0 +1,31 @@
+{
+  "version": "0.2.0-*",
+
+  "buildOptions": {
+    "copyToOutput": {
+      "include": "**/*.json"
+    }
+  },
+
+  "dependencies": {
+    "dotnet-test-nunit": "3.4.0-beta-3",
+    "Newtonsoft.Json": "9.0.1",
+    "NUnit": "3.5.0",
+    "GeoJSON.Net": "0.2.0-*",
+    "System.Reflection": "4.3.0"
+  },
+
+  "testRunner": "nunit",
+
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": "portable-net45+win8",
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.0.0-*",
+          "type": "platform"
+        }
+      }
+    }
+  }
+}
