@@ -6,7 +6,8 @@
   "version": "0.2.0-*",
   "buildOptions": {
     "copyToOutput": {
-      "include": "**/*.json"
+      "include": "**/*.json",
+      "exclude": [ "**/project.json", "**/project.lock.json" ]
     }
   },
   
