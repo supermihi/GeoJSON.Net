@@ -40,13 +40,15 @@ namespace GeoJSON.Net.Tests.CoordinateReferenceSystem
         [Test]
         public void Ctor_Throws_ArgumentNullExpection_When_Name_Is_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => { var collection = new FeatureCollection() { CRS = new NamedCRS(null) }; });
+            // ReSharper disable once ObjectCreationAsStatement
+            Assert.Throws<ArgumentNullException>(() => { new FeatureCollection() { CRS = new NamedCRS(null) }; });
         }
 
         [Test]
         public void Ctor_Throws_ArgumentNullExpection_When_Name_Is_Empty()
         {
-            Assert.Throws<ArgumentException>(() => { var collection = new FeatureCollection() { CRS = new NamedCRS(string.Empty) }; });
+            // ReSharper disable once ObjectCreationAsStatement
+            Assert.Throws<ArgumentException>(() => { new FeatureCollection() { CRS = new NamedCRS(string.Empty) }; });
         }
     }
 }

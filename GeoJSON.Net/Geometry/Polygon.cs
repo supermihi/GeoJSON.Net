@@ -36,25 +36,26 @@ namespace GeoJSON.Net.Geometry
         {
             if (coordinates == null)
             {
-                throw new ArgumentNullException("coordinates");
+                throw new ArgumentNullException(nameof(coordinates));
             }
 
             if (coordinates.Any(linearRing => !linearRing.IsLinearRing()))
             {
                 throw new ArgumentException("All elements must be closed LineStrings with 4 or more positions" +
-                                            " (see GeoJSON spec at 'http://geojson.org/geojson-spec.html#linestring').", "coordinates");
+                                            " (see GeoJSON spec at 'http://geojson.org/geojson-spec.html#linestring').", nameof(coordinates));
             }
 
             Coordinates = coordinates;
-            Type = GeoJSONObjectType.Polygon;
         }
+
+        public override GeoJSONObjectType Type => GeoJSONObjectType.Polygon;
 
         /// <summary>
         ///     Gets the list of points outlining this Polygon.
         /// </summary>
         [JsonProperty(PropertyName = "coordinates", Required = Required.Always)]
         [JsonConverter(typeof(PolygonConverter))]
-        public List<LineString> Coordinates { get; set; }
+        public IReadOnlyList<LineString> Coordinates { get; }
 
         public override bool Equals(object obj)
         {
@@ -68,12 +69,7 @@ namespace GeoJSON.Net.Geometry
                 return true;
             }
 
-            if (obj.GetType() != GetType())
-            {
-                return false;
-            }
-
-            return Equals((Polygon)obj);
+            return obj.GetType() == GetType() && Equals((Polygon)obj);
         }
 
         public override int GetHashCode()
@@ -91,7 +87,7 @@ namespace GeoJSON.Net.Geometry
             return !Equals(left, right);
         }
 
-        protected bool Equals(Polygon other)
+        private bool Equals(Polygon other)
         {
             return base.Equals(other) && Coordinates.SequenceEqual(other.Coordinates);
         }

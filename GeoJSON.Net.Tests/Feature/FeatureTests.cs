@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using GeoJSON.Net.Geometry;
 using Newtonsoft.Json;
@@ -34,14 +35,14 @@ namespace GeoJSON.Net.Tests.Feature
         {
             var coordinates = new[]
             {
-                new List<IPosition>
+                new []
                 {
                     new GeographicPosition(52.370725881211314, 4.889259338378906),
                     new GeographicPosition(52.3711451105601, 4.895267486572266),
                     new GeographicPosition(52.36931095278263, 4.892091751098633),
                     new GeographicPosition(52.370725881211314, 4.889259338378906)
                 },
-                new List<IPosition>
+                new []
                 {
                     new GeographicPosition(52.370725881211314, 4.989259338378906),
                     new GeographicPosition(52.3711451105601, 4.995267486572266),
@@ -67,14 +68,14 @@ namespace GeoJSON.Net.Tests.Feature
         {
             var geometry = new MultiLineString(new List<LineString>
             {
-                new LineString(new List<IPosition>
+                new LineString(new []
                 {
                     new GeographicPosition(52.370725881211314, 4.889259338378906),
                     new GeographicPosition(52.3711451105601, 4.895267486572266),
                     new GeographicPosition(52.36931095278263, 4.892091751098633),
                     new GeographicPosition(52.370725881211314, 4.889259338378906)
                 }),
-                new LineString(new List<IPosition>
+                new LineString(new []
                 {
                     new GeographicPosition(52.370725881211314, 4.989259338378906),
                     new GeographicPosition(52.3711451105601, 4.995267486572266),
@@ -196,6 +197,7 @@ namespace GeoJSON.Net.Tests.Feature
             CollectionAssert.IsEmpty(feature.Properties);
         }
 
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private enum MyTestEnum
         {
             Undefined,
@@ -203,6 +205,7 @@ namespace GeoJSON.Net.Tests.Feature
             Value2
         }
 
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
         private class MyTestClass
         {
             public bool BooleanProperty { get; set; }

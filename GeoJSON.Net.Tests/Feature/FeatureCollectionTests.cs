@@ -14,7 +14,8 @@ namespace GeoJSON.Net.Tests.Feature
         [Test]
         public void Ctor_Throws_ArgumentNullException_When_Features_Is_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => { var collection = new FeatureCollection(null); });
+            // ReSharper disable once ObjectCreationAsStatement
+            Assert.Throws<ArgumentNullException>(() => { new FeatureCollection(null); });
         }
 
         [Test]

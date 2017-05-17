@@ -11,7 +11,6 @@ using System.Linq;
 using System.Runtime.Serialization;
 using GeoJSON.Net.Converters;
 using GeoJSON.Net.CoordinateReferenceSystem;
-using GeoJSON.Net.Geometry;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -23,7 +22,7 @@ namespace GeoJSON.Net
     [JsonObject(MemberSerialization.OptIn)]
     public abstract class GeoJSONObject : IGeoJSONObject
     {
-        internal static readonly DoubleTenDecimalPlaceComparer DoubleComparer = new DoubleTenDecimalPlaceComparer();
+        private static readonly DoubleTenDecimalPlaceComparer DoubleComparer = new DoubleTenDecimalPlaceComparer();
 
         protected GeoJSONObject()
         {
@@ -70,7 +69,7 @@ namespace GeoJSON.Net
         /// </value>
         [JsonProperty(PropertyName = "type", Required = Required.Always)]
         [JsonConverter(typeof(StringEnumConverter))]
-        public GeoJSONObjectType Type { get; internal set; }
+        public abstract GeoJSONObjectType Type { get; }
 
         /// <summary>
         /// Determines whether the specified <see cref="System.Object" />, is equal to this instance.
@@ -109,7 +108,7 @@ namespace GeoJSON.Net
         {
             unchecked
             {
-                var hashCode = (BoundingBoxes != null ? BoundingBoxes.GetHashCode() : 0);
+                var hashCode = BoundingBoxes != null ? BoundingBoxes.GetHashCode() : 0;
                 hashCode = (hashCode * 397) ^ (CRS != null ? CRS.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (int)Type;
                 return hashCode;

@@ -17,7 +17,7 @@ namespace GeoJSON.Net.Tests.Geometry
             {
                 new Polygon(new List<LineString>
                 {
-                    new LineString(new List<IPosition>
+                    new LineString(new []
                     {
                         new GeographicPosition(52.959676831105995, -2.6797102391514338), 
                         new GeographicPosition(52.9608756693609, -2.6769029474483279), 
@@ -34,7 +34,7 @@ namespace GeoJSON.Net.Tests.Geometry
                 }), 
                 new Polygon(new List<LineString>
                 {
-                    new LineString(new List<IPosition>
+                    new LineString(new[]
                     {
                         new GeographicPosition(52.89610842810761, -2.69628632041613), 
                         new GeographicPosition(52.8894641454077, -2.75901233808515), 

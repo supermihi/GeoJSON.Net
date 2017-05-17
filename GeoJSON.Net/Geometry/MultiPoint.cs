@@ -9,7 +9,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using GeoJSON.Net.Converters;
 using Newtonsoft.Json;
 
 namespace GeoJSON.Net.Geometry
@@ -24,11 +23,12 @@ namespace GeoJSON.Net.Geometry
         ///     Initializes a new instance of the <see cref="MultiPoint" /> class.
         /// </summary>
         /// <param name="coordinates">The coordinates.</param>
-        public MultiPoint(List<Point> coordinates = null)
+        public MultiPoint(IReadOnlyList<Point> coordinates = null)
         {
-            this.Coordinates = coordinates ?? new List<Point>();
-            this.Type = GeoJSONObjectType.MultiPoint;
+            Coordinates = coordinates ?? new Point[]{};
         }
+
+        public override GeoJSONObjectType Type => GeoJSONObjectType.MultiPoint;
 
         /// <summary>
         ///     Gets the Coordinates.
@@ -36,7 +36,7 @@ namespace GeoJSON.Net.Geometry
         /// <value>The Coordinates.</value>
         [JsonProperty(PropertyName = "coordinates", Required = Required.Always)]
         [JsonConverter(typeof(MultiPointConverter))]
-        public List<Point> Coordinates { get; private set; }
+        public IReadOnlyList<Point> Coordinates { get; }
 
         public override bool Equals(object obj)
         {
@@ -48,7 +48,7 @@ namespace GeoJSON.Net.Geometry
             {
                 return true;
             }
-            if (obj.GetType() != this.GetType())
+            if (obj.GetType() != GetType())
             {
                 return false;
             }
@@ -70,7 +70,7 @@ namespace GeoJSON.Net.Geometry
             return !Equals(left, right);
         }
 
-        protected bool Equals(MultiPoint other)
+        private bool Equals(MultiPoint other)
         {
             return base.Equals(other) && Coordinates.SequenceEqual(other.Coordinates);
         }

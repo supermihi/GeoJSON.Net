@@ -30,21 +30,17 @@ namespace GeoJSON.Net.Geometry
         /// <param name="polygons">The polygons contained in this MultiPolygon.</param>
         public MultiPolygon(List<Polygon> polygons)
         {
-            if (polygons == null)
-            {
-                throw new ArgumentNullException("polygons");
-            }
-
-            Coordinates = polygons;
-            Type = GeoJSONObjectType.MultiPolygon;
+            Coordinates = polygons ?? throw new ArgumentNullException(nameof(polygons));
         }
+
+        public override GeoJSONObjectType Type => GeoJSONObjectType.MultiPolygon;
 
         /// <summary>
         ///     Gets the list of Polygons enclosed in this MultiPolygon.
         /// </summary>
         [JsonProperty(PropertyName = "coordinates", Required = Required.Always)]
         [JsonConverter(typeof(MultiPolygonConverter))]
-        public List<Polygon> Coordinates { get; private set; }
+        public IReadOnlyList<Polygon> Coordinates { get; }
 
         public override bool Equals(object obj)
         {
@@ -81,7 +77,7 @@ namespace GeoJSON.Net.Geometry
             return !Equals(left, right);
         }
 
-        protected bool Equals(MultiPolygon other)
+        private bool Equals(MultiPolygon other)
         {
             return base.Equals(other) && Coordinates.SequenceEqual(other.Coordinates);
         }

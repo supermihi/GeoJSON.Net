@@ -68,8 +68,7 @@ namespace GeoJSON.Net.Converters
 
                     foreach (var lineString in polygon.Coordinates ?? new List<LineString>())
                     {
-                        var coordinateElements = (lineString.Coordinates ?? new List<IPosition>())
-                            .OfType<GeographicPosition>()
+                        var coordinateElements = (lineString.Coordinates ?? new List<GeographicPosition>())
                             .ToList();
 
                         if (coordinateElements.Count == 0)

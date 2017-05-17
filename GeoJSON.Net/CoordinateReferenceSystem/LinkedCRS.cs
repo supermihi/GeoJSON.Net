@@ -32,13 +32,13 @@ namespace GeoJSON.Net.CoordinateReferenceSystem
         {
             if (href == null)
             {
-                throw new ArgumentNullException("href");
+                throw new ArgumentNullException(nameof(href));
             }
 
             Uri uri;
             if (href.Length == 0 || !Uri.TryCreate(href, UriKind.RelativeOrAbsolute, out uri))
             {
-                throw new ArgumentException("must be a dereferenceable URI", "href");
+                throw new ArgumentException("must be a dereferenceable URI", nameof(href));
             }
 
             Properties = new Dictionary<string, object> { { "href", href } };

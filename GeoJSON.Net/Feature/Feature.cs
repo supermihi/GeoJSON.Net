@@ -33,9 +33,9 @@ namespace GeoJSON.Net.Feature
             Geometry = geometry;
             Properties = properties ?? new Dictionary<string, object>();
             Id = id;
-
-            Type = GeoJSONObjectType.Feature;
         }
+
+        public override GeoJSONObjectType Type => GeoJSONObjectType.Feature;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="Feature" /> class.
@@ -61,8 +61,6 @@ namespace GeoJSON.Net.Feature
                     .Where(propertyInfo => propertyInfo.GetMethod.IsPublic)
                     .ToDictionary(propertyInfo => propertyInfo.Name, propertyInfo => propertyInfo.GetValue(properties, null));
             }
-
-            Type = GeoJSONObjectType.Feature;
         }
 
         /// <summary>

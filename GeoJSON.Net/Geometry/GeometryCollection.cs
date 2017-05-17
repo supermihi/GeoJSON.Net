@@ -33,21 +33,17 @@ namespace GeoJSON.Net.Geometry
         /// <param name="geometries">The geometries contained in this GeometryCollection.</param>
         public GeometryCollection(List<IGeometryObject> geometries)
         {
-            if (geometries == null)
-            {
-                throw new ArgumentNullException("geometries");
-            }
-
-            Geometries = geometries;
-            Type = GeoJSONObjectType.GeometryCollection;
+            Geometries = geometries ?? throw new ArgumentNullException(nameof(geometries));
+            
         }
+        public override GeoJSONObjectType Type => GeoJSONObjectType.GeometryCollection;
 
         /// <summary>
         ///     Gets the list of Polygons enclosed in this MultiPolygon.
         /// </summary>
         [JsonProperty(PropertyName = "geometries", Required = Required.Always)]
         [JsonConverter(typeof(GeometryConverter))]
-        public List<IGeometryObject> Geometries { get; private set; }
+        public IReadOnlyList<IGeometryObject> Geometries { get; }
 
         /// <summary>
         /// Determines whether the specified <see cref="System.Object"/>, is equal to this instance.
@@ -118,7 +114,7 @@ namespace GeoJSON.Net.Geometry
         /// </summary>
         /// <param name="other">The other.</param>
         /// <returns></returns>
-        protected bool Equals(GeometryCollection other)
+        private bool Equals(GeometryCollection other)
         {
             return base.Equals(other) && Geometries.SequenceEqual(other.Geometries);
         }

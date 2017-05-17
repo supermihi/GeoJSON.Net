@@ -29,12 +29,12 @@ namespace GeoJSON.Net.CoordinateReferenceSystem
         {
             if (name == null)
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
 
             if (name.Length == 0)
             {
-                throw new ArgumentException("must be specified", "name");
+                throw new ArgumentException("must be specified", nameof(name));
             }
 
             Properties = new Dictionary<string, object> { { "name", name } };

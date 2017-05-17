@@ -50,7 +50,7 @@ namespace GeoJSON.Net.Converters
 
             foreach (var ring in rings)
             {
-                var positions = (IEnumerable<IPosition>)LineStringConverter.ReadJson(reader, typeof(LineString), ring, serializer);
+                var positions = (IEnumerable<GeographicPosition>)LineStringConverter.ReadJson(reader, typeof(LineString), ring, serializer);
                 lineStrings.Add(new LineString(positions));
             }
 
@@ -65,24 +65,16 @@ namespace GeoJSON.Net.Converters
         /// <param name="serializer">The calling serializer.</param>
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var coordinateElements = value as List<LineString>;
-            if (coordinateElements != null && coordinateElements.Count > 0)
+            if (value is IReadOnlyCollection<LineString> coordinateElements && coordinateElements.Count > 0)
             {
-                if (coordinateElements[0].Coordinates[0] is GeographicPosition)
-                {
-                    writer.WriteStartArray();
+                writer.WriteStartArray();
 
-                    foreach (var subPolygon in coordinateElements)
-                    {
-                        LineStringConverter.WriteJson(writer, subPolygon.Coordinates, serializer);
-                    }
-
-                    writer.WriteEndArray();
-                }
-                else
+                foreach (var subPolygon in coordinateElements)
                 {
-                    throw new NotImplementedException();
+                    LineStringConverter.WriteJson(writer, subPolygon.Coordinates, serializer);
                 }
+
+                writer.WriteEndArray();
             }
             else
             {

@@ -30,25 +30,23 @@ namespace GeoJSON.Net.Geometry
         ///     Initializes a new instance of the <see cref="LineString" /> class.
         /// </summary>
         /// <param name="coordinates">The coordinates.</param>
-        public LineString(IEnumerable<IPosition> coordinates)
+        public LineString(IEnumerable<GeographicPosition> coordinates)
         {
             if (coordinates == null)
             {
-                throw new ArgumentNullException("coordinates");
+                throw new ArgumentNullException(nameof(coordinates));
             }
-
             var coordsList = coordinates.ToList();
 
             if (coordsList.Count < 2)
             {
                 throw new ArgumentOutOfRangeException(
-                    "coordinates", 
+                    nameof(coordinates), 
                     "According to the GeoJSON v1.0 spec a LineString must have at least two or more positions.");
             }
-
             Coordinates = coordsList;
-            Type = GeoJSONObjectType.LineString;
         }
+        public override GeoJSONObjectType Type => GeoJSONObjectType.LineString;
 
         /// <summary>
         ///     Gets the Positions.
@@ -56,7 +54,7 @@ namespace GeoJSON.Net.Geometry
         /// <value>The Positions.</value>
         [JsonProperty(PropertyName = "coordinates", Required = Required.Always)]
         [JsonConverter(typeof(LineStringConverter))]
-        public List<IPosition> Coordinates { get; set; }
+        public IReadOnlyList<GeographicPosition> Coordinates { get; }
 
         public override bool Equals(object obj)
         {
@@ -91,18 +89,7 @@ namespace GeoJSON.Net.Geometry
         /// </returns>
         public bool IsClosed()
         {
-            var firstCoordinate = Coordinates[0] as GeographicPosition;
-
-            if (firstCoordinate != null)
-            {
-                var lastCoordinate = Coordinates[Coordinates.Count - 1] as GeographicPosition;
-
-                return firstCoordinate.Latitude == lastCoordinate.Latitude
-                       && firstCoordinate.Longitude == lastCoordinate.Longitude
-                       && firstCoordinate.Altitude == lastCoordinate.Altitude;
-            }
-
-            return Coordinates[0].Equals(Coordinates[Coordinates.Count - 1]);
+            return Coordinates.First().Equals(Coordinates.Last());
         }
 
         /// <summary>
@@ -127,7 +114,7 @@ namespace GeoJSON.Net.Geometry
             return !Equals(left, right);
         }
 
-        protected bool Equals(LineString other)
+        private bool Equals(LineString other)
         {
             return base.Equals(other) && Coordinates.SequenceEqual(other.Coordinates);
         }

@@ -9,12 +9,6 @@
         /// <summary>
         /// Gets the CRS type.
         /// </summary>
-        public CRSType Type
-        {
-            get
-            {
-                return CRSType.Unspecified;
-            }
-        }
+        public CRSType Type => CRSType.Unspecified;
     }
 }

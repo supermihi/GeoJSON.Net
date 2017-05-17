@@ -26,16 +26,12 @@ namespace GeoJSON.Net.Geometry
         ///     Initializes a new instance of the <see cref="Point" /> class.
         /// </summary>
         /// <param name="coordinates">The Position.</param>
-        public Point(IPosition coordinates)
+        public Point(GeographicPosition coordinates)
         {
-            if (coordinates == null)
-            {
-                throw new ArgumentNullException("coordinates");
-            }
-
-            Coordinates = coordinates;
-            Type = GeoJSONObjectType.Point;
+            Coordinates = coordinates ?? throw new ArgumentNullException(nameof(coordinates));
         }
+
+        public override GeoJSONObjectType Type => GeoJSONObjectType.Point;
 
         /// <summary>
         ///     Gets or sets the Coordinate(s).
@@ -43,7 +39,7 @@ namespace GeoJSON.Net.Geometry
         /// <value>The Coordinates.</value>
         [JsonProperty(PropertyName = "coordinates", Required = Required.Always)]
         [JsonConverter(typeof(PointConverter))]
-        public IPosition Coordinates { get; set; }
+        public GeographicPosition Coordinates { get; }
 
         public override bool Equals(object obj)
         {
@@ -80,7 +76,7 @@ namespace GeoJSON.Net.Geometry
             return !Equals(left, right);
         }
 
-        protected bool Equals(Point other)
+        private bool Equals(Point other)
         {
             return base.Equals(other) && Coordinates.Equals(other.Coordinates);
         }

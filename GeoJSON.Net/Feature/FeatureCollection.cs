@@ -31,14 +31,10 @@ namespace GeoJSON.Net.Feature
         /// <param name="features">The features.</param>
         public FeatureCollection(List<Feature> features)
         {
-            if (features == null)
-            {
-                throw new ArgumentNullException("features");
-            }
-
-            Features = features;
-            Type = GeoJSONObjectType.FeatureCollection;
+            Features = features ?? throw new ArgumentNullException(nameof(features));
         }
+
+        public override GeoJSONObjectType Type => GeoJSONObjectType.FeatureCollection;
 
         /// <summary>
         ///     Gets the features.

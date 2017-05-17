@@ -49,19 +49,22 @@ namespace GeoJSON.Net.Tests.CoordinateReferenceSystem
         [Test]
         public void Ctor_Throws_ArgumentNullExpection_When_Href_String_Is_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => { var crs = new LinkedCRS((string)null); });
+            // ReSharper disable once ObjectCreationAsStatement
+            Assert.Throws<ArgumentNullException>(() => { new LinkedCRS((string)null); });
         }
 
         [Test]
         public void Ctor_Throws_ArgumentNullExpection_When_Href_Uri_Is_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => { var crs = new LinkedCRS((Uri)null); });
+            // ReSharper disable once ObjectCreationAsStatement
+            Assert.Throws<ArgumentNullException>(() => { new LinkedCRS((Uri)null); });
         }
 
         [Test]
         public void Ctor_Throws_ArgumentExpection_When_Href_Is_Not_Dereferencable_Uri()
         {
-            var argumentExpection = Assert.Throws<ArgumentException>(() => { var crs = new LinkedCRS("http://not-a-valid-<>-url"); });
+            // ReSharper disable once ObjectCreationAsStatement
+            var argumentExpection = Assert.Throws<ArgumentException>(() => new LinkedCRS("http://not-a-valid-<>-url"));
 
             Assert.AreEqual("must be a dereferenceable URI\r\nParameter name: href", argumentExpection.Message);
         }
@@ -69,13 +72,15 @@ namespace GeoJSON.Net.Tests.CoordinateReferenceSystem
         [Test]
         public void Ctor_Does_Not_Throw_When_Href_Is_Dereferencable_Uri()
         {
-            Assert.DoesNotThrow(() => { var crs = new LinkedCRS("data.crs"); });
+            // ReSharper disable once ObjectCreationAsStatement
+            Assert.DoesNotThrow(() => { new LinkedCRS("data.crs"); });
         }
 
         [Test]
         public void Ctor_Throws_ArgumentNullExpection_When_Name_Is_Empty()
         {
-            Assert.Throws<ArgumentException>(() => { var crs = new LinkedCRS(string.Empty); });
+            // ReSharper disable once ObjectCreationAsStatement
+            Assert.Throws<ArgumentException>(() => { new LinkedCRS(string.Empty); });
         }
     }
 }

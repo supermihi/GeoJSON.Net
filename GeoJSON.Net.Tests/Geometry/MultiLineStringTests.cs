@@ -15,13 +15,13 @@ namespace GeoJSON.Net.Tests.Geometry
 
             var expectedMultiLineString = new MultiLineString(new List<LineString>
             {
-                new LineString(new List<IPosition>
+                new LineString(new []
                 {
                     new GeographicPosition(52.379790828551016, 5.3173828125),
                     new GeographicPosition(52.36721467920585, 5.456085205078125),
                     new GeographicPosition(52.303440474272755, 5.386047363281249, 4.23)
                 }),
-                new LineString(new List<IPosition>
+                new LineString(new []
                 {
                     new GeographicPosition(52.379790828551016, 5.3273828125),
                     new GeographicPosition(52.36721467920585, 5.486085205078125),
@@ -40,13 +40,13 @@ namespace GeoJSON.Net.Tests.Geometry
         {
             var expectedMultiLineString = new MultiLineString(new List<LineString>
             {
-                new LineString(new List<IPosition>
+                new LineString(new []
                 {
                     new GeographicPosition(52.379790828551016, 5.3173828125),
                     new GeographicPosition(52.36721467920585, 5.456085205078125),
                     new GeographicPosition(52.303440474272755, 5.386047363281249, 4.23)
                 }),
-                new LineString(new List<IPosition>
+                new LineString(new []
                 {
                     new GeographicPosition(52.379790828551016, 5.3273828125),
                     new GeographicPosition(52.36721467920585, 5.486085205078125),

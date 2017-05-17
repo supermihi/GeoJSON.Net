@@ -22,7 +22,7 @@ namespace GeoJSON.Net.Tests.Geometry
                     new Point(new GeographicPosition(52.303440474272755, 5.386047363281249, 4.23))
                 });
 
-                var lineString = new LineString(new List<IPosition>
+                var lineString = new LineString(new []
                 {
                     new GeographicPosition(52.379790828551016, 5.3173828125),
                     new GeographicPosition(52.36721467920585, 5.456085205078125),
@@ -31,13 +31,13 @@ namespace GeoJSON.Net.Tests.Geometry
 
                 var multiLineString = new MultiLineString(new List<LineString>
                 {
-                    new LineString(new List<IPosition>
+                    new LineString(new []
                     {
                         new GeographicPosition(52.379790828551016, 5.3173828125),
                         new GeographicPosition(52.36721467920585, 5.456085205078125),
                         new GeographicPosition(52.303440474272755, 5.386047363281249, 4.23)
                     }),
-                    new LineString(new List<IPosition>
+                    new LineString(new []
                     {
                         new GeographicPosition(52.379790828551016, 5.3273828125),
                         new GeographicPosition(52.36721467920585, 5.486085205078125),
@@ -60,7 +60,7 @@ namespace GeoJSON.Net.Tests.Geometry
                 {
                     new Polygon(new List<LineString>
                     {
-                        new LineString(new List<IPosition>
+                        new LineString(new []
                         {
                             new GeographicPosition(52.959676831105995, -2.6797102391514338),
                             new GeographicPosition(52.9608756693609, -2.6769029474483279),
@@ -77,7 +77,7 @@ namespace GeoJSON.Net.Tests.Geometry
                     }),
                     new Polygon(new List<LineString>
                     {
-                        new LineString(new List<IPosition>
+                        new LineString(new []
                         {
                             new GeographicPosition(52.89610842810761, -2.69628632041613),
                             new GeographicPosition(52.8894641454077, -2.75901233808515),
@@ -160,7 +160,7 @@ namespace GeoJSON.Net.Tests.Geometry
             }
 
             [JsonConverter(typeof(GeometryConverter))]
-            public IGeometryObject Geometry { get; private set; }
+            public IGeometryObject Geometry { get; }
 
             /// <summary>
             ///     Determines whether the specified <see cref="T:System.Object" /> is equal to the current

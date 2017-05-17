@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Copyright>Copyright (C) 2016 Joerg Battermann and Contributors</Copyright>
+    <AssemblyTitle>GeoJSON.Net</AssemblyTitle>
+    <VersionPrefix>0.2.0</VersionPrefix>
+    <Authors>Joerg Battermann</Authors>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <AssemblyName>GeoJSON.Net</AssemblyName>
+    <PackageId>GeoJSON.Net</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>

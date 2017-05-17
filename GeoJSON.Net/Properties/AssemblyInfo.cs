@@ -8,7 +8,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Reflection;
-using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("GeoJSON.Net")]
 [assembly: AssemblyDescription(".Net types for the GeoJSON 1.0 specs to be used with Json.Net")]

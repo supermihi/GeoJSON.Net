@@ -17,7 +17,7 @@ namespace GeoJSON.Net.Geometry
     ///     Defines the Geographic Position type a.k.a.
     ///     <see cref="http://geojson.org/geojson-spec.html#positions">Geographic Coordinate Reference System</see>.
     /// </summary>
-    public class GeographicPosition : Position
+    public class GeographicPosition
     {
         private static readonly NullableDoubleTenDecimalPlaceComparer DoubleComparer = new NullableDoubleTenDecimalPlaceComparer();
 
@@ -46,22 +46,22 @@ namespace GeoJSON.Net.Geometry
         {
             if (latitude == null)
             {
-                throw new ArgumentNullException("latitude");
+                throw new ArgumentNullException(nameof(latitude));
             }
 
             if (longitude == null)
             {
-                throw new ArgumentNullException("longitude");
+                throw new ArgumentNullException(nameof(longitude));
             }
 
             if (string.IsNullOrWhiteSpace(latitude))
             {
-                throw new ArgumentOutOfRangeException("latitude", "May not be empty.");
+                throw new ArgumentOutOfRangeException(nameof(latitude), "May not be empty.");
             }
 
             if (string.IsNullOrWhiteSpace(longitude))
             {
-                throw new ArgumentOutOfRangeException("longitude", "May not be empty.");
+                throw new ArgumentOutOfRangeException(nameof(longitude), "May not be empty.");
             }
 
             double lat;
@@ -69,12 +69,12 @@ namespace GeoJSON.Net.Geometry
 
             if (!double.TryParse(latitude, NumberStyles.Float, CultureInfo.InvariantCulture, out lat) || Math.Abs(lat) > 90)
             {
-                throw new ArgumentOutOfRangeException("latitude", "Latitude must be a proper lat (+/- double) value between -90 and 90.");
+                throw new ArgumentOutOfRangeException(nameof(latitude), "Latitude must be a proper lat (+/- double) value between -90 and 90.");
             }
 
             if (!double.TryParse(longitude, NumberStyles.Float, CultureInfo.InvariantCulture, out lon) || Math.Abs(lon) > 180)
             {
-                throw new ArgumentOutOfRangeException("longitude", "Longitude must be a proper lon (+/- double) value between -180 and 180.");
+                throw new ArgumentOutOfRangeException(nameof(longitude), "Longitude must be a proper lon (+/- double) value between -180 and 180.");
             }
 
             Latitude = lat;
@@ -85,7 +85,7 @@ namespace GeoJSON.Net.Geometry
                 double alt;
                 if (!double.TryParse(altitude, NumberStyles.Float, CultureInfo.InvariantCulture, out alt))
                 {
-                    throw new ArgumentOutOfRangeException("altitude", "Altitude must be a proper altitude (m(eter) as double) value, e.g. '6500'.");
+                    throw new ArgumentOutOfRangeException(nameof(altitude), "Altitude must be a proper altitude (m(eter) as double) value, e.g. '6500'.");
                 }
 
                 Altitude = alt;

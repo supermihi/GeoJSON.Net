@@ -35,7 +35,7 @@ namespace GeoJSON.Net.Tests.Geometry
 
             var expectedPolygon = new Polygon(new List<LineString>
             {
-                new LineString(new List<IPosition>
+                new LineString(new []
                 {
                     new GeographicPosition(34.9895035675793, -84.3228149414063),
                     new GeographicPosition(35.2198194079344, -84.2912292480469),
@@ -214,7 +214,7 @@ namespace GeoJSON.Net.Tests.Geometry
                     new GeographicPosition(34.9850031301711, -84.22119140625),
                     new GeographicPosition(34.9895035675793, -84.3228149414063),
                 }),
-                new LineString(new List<IPosition>
+                new LineString(new []
                 {
                     new GeographicPosition(35.7420538306804, -75.6903076171875),
                     new GeographicPosition(35.7420538306804, -75.5914306640625),

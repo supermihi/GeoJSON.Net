@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace GeoJSON.Net.Tests
@@ -14,7 +13,7 @@ namespace GeoJSON.Net.Tests
         {
             get
             {              
-                var codeBase = System.AppContext.BaseDirectory;
+                var codeBase = AppContext.BaseDirectory;
                 UriBuilder uri = new UriBuilder(codeBase);
                 string path = Uri.UnescapeDataString(uri.Path);
                 return path;
