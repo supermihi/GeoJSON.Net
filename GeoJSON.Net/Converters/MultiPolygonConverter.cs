@@ -56,9 +56,7 @@ namespace GeoJSON.Net.Converters
         /// <param name="serializer">The calling serializer.</param>
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var polygons = value as List<Polygon>;
-
-            if (polygons != null)
+            if (value is List<Polygon> polygons)
             {
                 writer.WriteStartArray();
                 foreach (var polygon in polygons)
@@ -66,29 +64,25 @@ namespace GeoJSON.Net.Converters
                     // start of polygon
                     writer.WriteStartArray();
 
-                    foreach (var lineString in polygon.Coordinates ?? new List<LineString>())
+                    foreach (var posArray in polygon.Coordinates ?? new List<IReadOnlyList<GeographicPosition>>())
                     {
-                        var coordinateElements = (lineString.Coordinates ?? new List<GeographicPosition>())
-                            .ToList();
 
-                        if (coordinateElements.Count == 0)
+                        if (posArray.Count == 0)
                             continue;
 
                         // start linear rings of polygon
                         writer.WriteStartArray();
 
-                        foreach (var position in coordinateElements)
+                        foreach (var position in posArray)
                         {
-                            var coordinates = position;
-
                             writer.WriteStartArray();
 
-                            writer.WriteValue(coordinates.Longitude);
-                            writer.WriteValue(coordinates.Latitude);
+                            writer.WriteValue(position.Longitude);
+                            writer.WriteValue(position.Latitude);
 
-                            if (coordinates.Altitude.HasValue)
+                            if (position.Altitude.HasValue)
                             {
-                                writer.WriteValue(coordinates.Altitude.Value);
+                                writer.WriteValue(position.Altitude.Value);
                             }
 
                             writer.WriteEndArray();

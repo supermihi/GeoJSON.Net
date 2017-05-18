@@ -44,7 +44,7 @@ namespace GeoJSON.Net.Converters
         /// </returns>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            double[][] coordinates = existingValue == null
+            var coordinates = existingValue == null
                 ? serializer.Deserialize<double[][]>(reader)
                 : (double[][])existingValue;
 

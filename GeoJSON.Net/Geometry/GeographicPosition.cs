@@ -10,6 +10,8 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using GeoJSON.Net.Converters;
+using Newtonsoft.Json;
 
 namespace GeoJSON.Net.Geometry
 {
@@ -17,9 +19,10 @@ namespace GeoJSON.Net.Geometry
     ///     Defines the Geographic Position type a.k.a.
     ///     <see cref="http://geojson.org/geojson-spec.html#positions">Geographic Coordinate Reference System</see>.
     /// </summary>
-    public class GeographicPosition
+    [JsonConverter(typeof(GeographicPositionConverter))]
+    public class GeographicPosition : IEquatable<GeographicPosition>
     {
-        private static readonly NullableDoubleTenDecimalPlaceComparer DoubleComparer = new NullableDoubleTenDecimalPlaceComparer();
+        private static readonly DoubleTenDecimalPlaceComparer DoubleComparer = new DoubleTenDecimalPlaceComparer();
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="GeographicPosition" /> class.
@@ -28,11 +31,10 @@ namespace GeoJSON.Net.Geometry
         /// <param name="longitude">The longitude.</param>
         /// <param name="altitude">The altitude in m(eter).</param>
         public GeographicPosition(double latitude, double longitude, double? altitude = null)
-            : this()
         {
-            Latitude = latitude;
-            Longitude = longitude;
-            Altitude = altitude;
+            Coordinates = altitude.HasValue
+                ? new[] {longitude, latitude, altitude.Value}
+                : new[] {longitude, latitude};
         }
 
         /// <summary>
@@ -41,8 +43,7 @@ namespace GeoJSON.Net.Geometry
         /// <param name="latitude">The latitude, e.g. '38.889722'.</param>
         /// <param name="longitude">The longitude, e.g. '-77.008889'.</param>
         /// <param name="altitude">The altitude in m(eters).</param>
-        public GeographicPosition(string latitude, string longitude, string altitude = null)
-            : this()
+        public static GeographicPosition Parse(string latitude, string longitude, string altitude = null)
         {
             if (latitude == null)
             {
@@ -64,70 +65,46 @@ namespace GeoJSON.Net.Geometry
                 throw new ArgumentOutOfRangeException(nameof(longitude), "May not be empty.");
             }
 
-            double lat;
-            double lon;
 
-            if (!double.TryParse(latitude, NumberStyles.Float, CultureInfo.InvariantCulture, out lat) || Math.Abs(lat) > 90)
+            if (!double.TryParse(latitude, NumberStyles.Float, CultureInfo.InvariantCulture, out double lat) || Math.Abs(lat) > 90)
             {
                 throw new ArgumentOutOfRangeException(nameof(latitude), "Latitude must be a proper lat (+/- double) value between -90 and 90.");
             }
 
-            if (!double.TryParse(longitude, NumberStyles.Float, CultureInfo.InvariantCulture, out lon) || Math.Abs(lon) > 180)
+            if (!double.TryParse(longitude, NumberStyles.Float, CultureInfo.InvariantCulture, out double lon) || Math.Abs(lon) > 180)
             {
                 throw new ArgumentOutOfRangeException(nameof(longitude), "Longitude must be a proper lon (+/- double) value between -180 and 180.");
             }
 
-            Latitude = lat;
-            Longitude = lon;
+            
 
             if (altitude != null)
             {
-                double alt;
-                if (!double.TryParse(altitude, NumberStyles.Float, CultureInfo.InvariantCulture, out alt))
+                if (!double.TryParse(altitude, NumberStyles.Float, CultureInfo.InvariantCulture, out double alt))
                 {
                     throw new ArgumentOutOfRangeException(nameof(altitude), "Altitude must be a proper altitude (m(eter) as double) value, e.g. '6500'.");
                 }
-
-                Altitude = alt;
+                return new GeographicPosition(lat, lon, alt);
             }
-        }
-
-        /// <summary>
-        ///     Prevents a default instance of the <see cref="GeographicPosition" /> class from being created.
-        /// </summary>
-        private GeographicPosition()
-        {
-            Coordinates = new double?[3];
+            return new GeographicPosition(lat, lon);
         }
 
         /// <summary>
         ///     Gets the altitude.
         /// </summary>
-        public double? Altitude
-        {
-            get { return Coordinates[2]; }
-            private set { Coordinates[2] = value; }
-        }
+        public double? Altitude => Coordinates.Length > 2 ? (double?)Coordinates[2] : null;
 
         /// <summary>
         ///     Gets the latitude.
         /// </summary>
         /// <value>The latitude.</value>
-        public double Latitude
-        {
-            get { return Coordinates[0].GetValueOrDefault(); }
-            private set { Coordinates[0] = value; }
-        }
+        public double Latitude => Coordinates[1];
 
         /// <summary>
         ///     Gets the longitude.
         /// </summary>
         /// <value>The longitude.</value>
-        public double Longitude
-        {
-            get { return Coordinates[1].GetValueOrDefault(); }
-            private set { Coordinates[1] = value; }
-        }
+        public double Longitude => Coordinates[0];
 
         /// <summary>
         ///     Gets or sets the coordinates, is a 2-size array
@@ -135,14 +112,14 @@ namespace GeoJSON.Net.Geometry
         /// <value>
         ///     The coordinates.
         /// </value>
-        private double?[] Coordinates { get; set; }
+        internal double[] Coordinates { get; }
 
         /// <summary>
-        /// Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+        /// Determines whether the specified <see cref="object" />, is equal to this instance.
         /// </summary>
-        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+        /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
         /// <returns>
-        ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+        ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object obj)
         {
@@ -156,12 +133,7 @@ namespace GeoJSON.Net.Geometry
                 return true;
             }
 
-            if (obj.GetType() != GetType())
-            {
-                return false;
-            }
-
-            return Equals((GeographicPosition)obj);
+            return obj.GetType() == GetType() && Equals((GeographicPosition)obj);
         }
 
         /// <summary>
@@ -202,10 +174,10 @@ namespace GeoJSON.Net.Geometry
         }
 
         /// <summary>
-        ///     Returns a <see cref="System.String" /> that represents this instance.
+        ///     Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>
-        ///     A <see cref="System.String" /> that represents this instance.
+        ///     A <see cref="string" /> that represents this instance.
         /// </returns>
         public override string ToString()
         {
@@ -221,9 +193,14 @@ namespace GeoJSON.Net.Geometry
         /// <returns>
         ///   <c>true</c> if the specified <see cref="GeographicPosition" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        protected bool Equals(GeographicPosition other)
+        public bool Equals(GeographicPosition other)
         {
             return Coordinates.SequenceEqual(other.Coordinates, DoubleComparer);
+        }
+
+        public bool StrictlyEquals(GeographicPosition other)
+        {
+            return Coordinates.SequenceEqual(other.Coordinates);
         }
     }
 }

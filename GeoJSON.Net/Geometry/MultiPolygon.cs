@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeoJSON.Net.Converters;
 using Newtonsoft.Json;
 
 namespace GeoJSON.Net.Geometry
@@ -18,7 +17,7 @@ namespace GeoJSON.Net.Geometry
     /// <summary>
     ///     Defines the <see cref="http://geojson.org/geojson-spec.html#multipolygon">MultiPolygon</see> type.
     /// </summary>
-    public class MultiPolygon : GeoJSONObject, IGeometryObject
+    public class MultiPolygon : GeoJSONObject, IGeometryObject, IEquatable<MultiPolygon>
     {
         public MultiPolygon() : this(new List<Polygon>())
         {
@@ -28,9 +27,14 @@ namespace GeoJSON.Net.Geometry
         ///     Initializes a new instance of the <see cref="MultiPolygon" /> class.
         /// </summary>
         /// <param name="polygons">The polygons contained in this MultiPolygon.</param>
-        public MultiPolygon(List<Polygon> polygons)
+        public MultiPolygon(IEnumerable<Polygon> polygons) : this(polygons.Select(p => p.Coordinates))
         {
-            Coordinates = polygons ?? throw new ArgumentNullException(nameof(polygons));
+        }
+
+        [JsonConstructor]
+        public MultiPolygon(IEnumerable<IEnumerable<IEnumerable<GeographicPosition>>> coordinates)
+        {
+            Coordinates = coordinates.Select(p => p.Select(l => l.ToArray()).ToArray()).ToArray();
         }
 
         public override GeoJSONObjectType Type => GeoJSONObjectType.MultiPolygon;
@@ -39,8 +43,7 @@ namespace GeoJSON.Net.Geometry
         ///     Gets the list of Polygons enclosed in this MultiPolygon.
         /// </summary>
         [JsonProperty(PropertyName = "coordinates", Required = Required.Always)]
-        [JsonConverter(typeof(MultiPolygonConverter))]
-        public IReadOnlyList<Polygon> Coordinates { get; }
+        public IReadOnlyList<IReadOnlyList<IReadOnlyList<GeographicPosition>>> Coordinates { get; }
 
         public override bool Equals(object obj)
         {
@@ -77,9 +80,9 @@ namespace GeoJSON.Net.Geometry
             return !Equals(left, right);
         }
 
-        private bool Equals(MultiPolygon other)
+        public bool Equals(MultiPolygon other)
         {
-            return base.Equals(other) && Coordinates.SequenceEqual(other.Coordinates);
+            return base.Equals(other) && Coordinates.SequenceEqual(other.Coordinates, PositionArrayArrayComparer.Instance);
         }
     }
 }

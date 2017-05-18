@@ -9,7 +9,7 @@ namespace GeoJSON.Net.Tests.Geometry
     [TestFixture]
     public class GeometryTests : TestBase
     {
-        public static IEnumerable<IGeometryObject> Geometries
+        private static IEnumerable<IGeometryObject> Geometries
         {
             get
             {

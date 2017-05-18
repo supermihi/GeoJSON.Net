@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeoJSON.Net.Converters;
 using Newtonsoft.Json;
 
 namespace GeoJSON.Net.Geometry
@@ -21,15 +20,12 @@ namespace GeoJSON.Net.Geometry
     [JsonObject(MemberSerialization.OptIn)]
     public class LineString : GeoJSONObject, IGeometryObject
     {
-        [JsonConstructor]
-        protected internal LineString()
-        {
-        }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="LineString" /> class.
         /// </summary>
         /// <param name="coordinates">The coordinates.</param>
+        [JsonConstructor]
         public LineString(IEnumerable<GeographicPosition> coordinates)
         {
             if (coordinates == null)
@@ -42,7 +38,7 @@ namespace GeoJSON.Net.Geometry
             {
                 throw new ArgumentOutOfRangeException(
                     nameof(coordinates), 
-                    "According to the GeoJSON v1.0 spec a LineString must have at least two or more positions.");
+                    "According to the GeoJSON v1.0 spec a LineString must have at least two positions.");
             }
             Coordinates = coordsList;
         }
@@ -53,7 +49,6 @@ namespace GeoJSON.Net.Geometry
         /// </summary>
         /// <value>The Positions.</value>
         [JsonProperty(PropertyName = "coordinates", Required = Required.Always)]
-        [JsonConverter(typeof(LineStringConverter))]
         public IReadOnlyList<GeographicPosition> Coordinates { get; }
 
         public override bool Equals(object obj)
@@ -68,12 +63,7 @@ namespace GeoJSON.Net.Geometry
                 return true;
             }
 
-            if (obj.GetType() != GetType())
-            {
-                return false;
-            }
-
-            return Equals((LineString)obj);
+            return obj.GetType() == GetType() && Equals((LineString)obj);
         }
 
         public override int GetHashCode()
@@ -81,28 +71,7 @@ namespace GeoJSON.Net.Geometry
             return Coordinates.GetHashCode();
         }
 
-        /// <summary>
-        ///     Determines whether this instance has its first and last coordinate at the same position and thereby is closed.
-        /// </summary>
-        /// <returns>
-        ///     <c>true</c> if this instance is closed; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsClosed()
-        {
-            return Coordinates.First().Equals(Coordinates.Last());
-        }
-
-        /// <summary>
-        ///     Determines whether this LineString is a
-        ///     <see cref="http://geojson.org/geojson-spec.html#linestring">LinearRing</see>.
-        /// </summary>
-        /// <returns>
-        ///     <c>true</c> if it is a linear ring; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsLinearRing()
-        {
-            return Coordinates.Count >= 4 && IsClosed();
-        }
+        public bool IsClosed() => Coordinates.IsClosed();
 
         public static bool operator ==(LineString left, LineString right)
         {

@@ -21,9 +21,9 @@ namespace GeoJSON.Net.Tests.Feature
         [Test]
         public void Can_Deserialize()
         {
-            string json = GetExpectedJson();
+            var json = GetExpectedJson();
 
-            var featureCollection = JsonConvert.DeserializeObject<FeatureCollection<IFeature>>(json);
+            var featureCollection = JsonConvert.DeserializeObject<FeatureCollection<Feature<IGeometryObject>>>(json);
 
             Assert.IsNotNull(featureCollection.Features);
             Assert.AreEqual(featureCollection.Features.Count, 3);
@@ -50,7 +50,7 @@ namespace GeoJSON.Net.Tests.Feature
                     { "test2", 2 }
                 };
 
-                var feature = Net.Feature.Feature.Generic(geom, props);
+                var feature = new Feature<LineString>(geom, props);
                 model.Features.Add(feature);
             }
 

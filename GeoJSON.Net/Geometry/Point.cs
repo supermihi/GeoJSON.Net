@@ -8,7 +8,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using GeoJSON.Net.Converters;
 using Newtonsoft.Json;
 
 namespace GeoJSON.Net.Geometry
@@ -19,13 +18,11 @@ namespace GeoJSON.Net.Geometry
     /// <seealso cref="http://geojson.org/geojson-spec.html#point" />
     public class Point : GeoJSONObject, IGeometryObject
     {
-        [JsonConstructor]
-        private Point() { }
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="Point" /> class.
         /// </summary>
         /// <param name="coordinates">The Position.</param>
+        /// [JsonConstructor]
         public Point(GeographicPosition coordinates)
         {
             Coordinates = coordinates ?? throw new ArgumentNullException(nameof(coordinates));
@@ -38,7 +35,6 @@ namespace GeoJSON.Net.Geometry
         /// </summary>
         /// <value>The Coordinates.</value>
         [JsonProperty(PropertyName = "coordinates", Required = Required.Always)]
-        [JsonConverter(typeof(PointConverter))]
         public GeographicPosition Coordinates { get; }
 
         public override bool Equals(object obj)

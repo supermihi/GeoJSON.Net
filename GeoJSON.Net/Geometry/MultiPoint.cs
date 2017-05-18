@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
@@ -17,15 +18,21 @@ namespace GeoJSON.Net.Geometry
     ///     Contains an array of <see cref="Point" />s.
     /// </summary>
     /// <seealso cref="http://geojson.org/geojson-spec.html#multipoint" />
-    public class MultiPoint : GeoJSONObject, IGeometryObject
+    public class MultiPoint : GeoJSONObject, IGeometryObject, IEquatable<MultiPoint>
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="MultiPoint" /> class.
         /// </summary>
         /// <param name="coordinates">The coordinates.</param>
-        public MultiPoint(IReadOnlyList<Point> coordinates = null)
+        public MultiPoint(IEnumerable<Point> coordinates)
+            : this(coordinates.Select(c => c.Coordinates))
         {
-            Coordinates = coordinates ?? new Point[]{};
+        }
+
+        [JsonConstructor]
+        public MultiPoint(IEnumerable<GeographicPosition> coordinates)
+        {
+            Coordinates = coordinates.ToArray();
         }
 
         public override GeoJSONObjectType Type => GeoJSONObjectType.MultiPoint;
@@ -35,8 +42,7 @@ namespace GeoJSON.Net.Geometry
         /// </summary>
         /// <value>The Coordinates.</value>
         [JsonProperty(PropertyName = "coordinates", Required = Required.Always)]
-        [JsonConverter(typeof(MultiPointConverter))]
-        public IReadOnlyList<Point> Coordinates { get; }
+        public IReadOnlyList<GeographicPosition> Coordinates { get; }
 
         public override bool Equals(object obj)
         {
@@ -48,11 +54,7 @@ namespace GeoJSON.Net.Geometry
             {
                 return true;
             }
-            if (obj.GetType() != GetType())
-            {
-                return false;
-            }
-            return Equals((MultiPoint)obj);
+            return obj.GetType() == GetType() && Equals((MultiPoint)obj);
         }
 
         public override int GetHashCode()
@@ -70,7 +72,7 @@ namespace GeoJSON.Net.Geometry
             return !Equals(left, right);
         }
 
-        private bool Equals(MultiPoint other)
+        public bool Equals(MultiPoint other)
         {
             return base.Equals(other) && Coordinates.SequenceEqual(other.Coordinates);
         }

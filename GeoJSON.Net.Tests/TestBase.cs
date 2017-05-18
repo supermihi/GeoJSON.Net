@@ -7,15 +7,13 @@ namespace GeoJSON.Net.Tests
 {
     public abstract class TestBase
     {
-        private static readonly string AssemblyName = typeof(TestBase).Name;
-
-        public static string AssemblyDirectory
+        private static string AssemblyDirectory
         {
             get
             {              
                 var codeBase = AppContext.BaseDirectory;
-                UriBuilder uri = new UriBuilder(codeBase);
-                string path = Uri.UnescapeDataString(uri.Path);
+                var uri = new UriBuilder(codeBase);
+                var path = Uri.UnescapeDataString(uri.Path);
                 return path;
                 
             }

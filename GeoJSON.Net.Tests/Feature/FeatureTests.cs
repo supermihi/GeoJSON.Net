@@ -191,7 +191,7 @@ namespace GeoJSON.Net.Tests.Feature
         [Test]
         public void Ctor_Creates_Properties_Collection_When_Passed_Null_Proper_Object()
         {
-            var feature = Net.Feature.Feature.Generic(new Point(new GeographicPosition(10, 10)), null);
+            var feature = Net.Feature.Feature.Generic(new Point(new GeographicPosition(10, 10)));
 
             Assert.IsNotNull(feature.Properties);
             CollectionAssert.IsEmpty(feature.Properties);
