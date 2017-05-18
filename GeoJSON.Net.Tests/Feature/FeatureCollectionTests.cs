@@ -15,7 +15,7 @@ namespace GeoJSON.Net.Tests.Feature
         public void Ctor_Throws_ArgumentNullException_When_Features_Is_Null()
         {
             // ReSharper disable once ObjectCreationAsStatement
-            Assert.Throws<ArgumentNullException>(() => { new FeatureCollection(null); });
+            Assert.Throws<ArgumentNullException>(() => { new FeatureCollection<IFeature>(null); });
         }
 
         [Test]
@@ -23,7 +23,7 @@ namespace GeoJSON.Net.Tests.Feature
         {
             string json = GetExpectedJson();
 
-            var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(json);
+            var featureCollection = JsonConvert.DeserializeObject<FeatureCollection<IFeature>>(json);
 
             Assert.IsNotNull(featureCollection.Features);
             Assert.AreEqual(featureCollection.Features.Count, 3);
@@ -35,7 +35,7 @@ namespace GeoJSON.Net.Tests.Feature
         [Test]
         public void FeatureCollectionSerialization()
         {
-            var model = new FeatureCollection();
+            var model = new FeatureCollection<Feature<LineString>>();
             for (var i = 10; i-- > 0;)
             {
                 var geom = new LineString(new[]
@@ -50,7 +50,7 @@ namespace GeoJSON.Net.Tests.Feature
                     { "test2", 2 }
                 };
 
-                var feature = new Net.Feature.Feature(geom, props);
+                var feature = Net.Feature.Feature.Generic(geom, props);
                 model.Features.Add(feature);
             }
 

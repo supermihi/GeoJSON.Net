@@ -12,7 +12,7 @@ namespace GeoJSON.Net.Tests.CoordinateReferenceSystem
         [Test]
         public void Can_Serialize_Does_Not_Output_Crs_Property()
         {
-            var collection = new FeatureCollection();
+            var collection = new FeatureCollection<IFeature>();
 
             var json = JsonConvert.SerializeObject(collection);
 

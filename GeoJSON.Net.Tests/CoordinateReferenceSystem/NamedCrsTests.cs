@@ -31,7 +31,7 @@ namespace GeoJSON.Net.Tests.CoordinateReferenceSystem
         [Test]
         public void Can_Serialize()
         {
-            var collection = new FeatureCollection() { CRS = new NamedCRS("EPSG:31370") };
+            var collection = new FeatureCollection<IFeature> { CRS = new NamedCRS("EPSG:31370") };
             var actualJson = JsonConvert.SerializeObject(collection);
 
             JsonAssert.Contains("{\"properties\":{\"name\":\"EPSG:31370\"},\"type\":\"name\"}", actualJson);
@@ -41,14 +41,14 @@ namespace GeoJSON.Net.Tests.CoordinateReferenceSystem
         public void Ctor_Throws_ArgumentNullExpection_When_Name_Is_Null()
         {
             // ReSharper disable once ObjectCreationAsStatement
-            Assert.Throws<ArgumentNullException>(() => { new FeatureCollection() { CRS = new NamedCRS(null) }; });
+            Assert.Throws<ArgumentNullException>(() => { new FeatureCollection<IFeature> { CRS = new NamedCRS(null) }; });
         }
 
         [Test]
         public void Ctor_Throws_ArgumentNullExpection_When_Name_Is_Empty()
         {
             // ReSharper disable once ObjectCreationAsStatement
-            Assert.Throws<ArgumentException>(() => { new FeatureCollection() { CRS = new NamedCRS(string.Empty) }; });
+            Assert.Throws<ArgumentException>(() => { new FeatureCollection<IFeature>{ CRS = new NamedCRS(string.Empty) }; });
         }
     }
 }

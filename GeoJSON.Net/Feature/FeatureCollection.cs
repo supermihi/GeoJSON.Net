@@ -9,6 +9,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using GeoJSON.Net.Geometry;
 using Newtonsoft.Json;
 
 namespace GeoJSON.Net.Feature
@@ -16,22 +18,22 @@ namespace GeoJSON.Net.Feature
     /// <summary>
     ///     Defines the FeatureCollection type.
     /// </summary>
-    public class FeatureCollection : GeoJSONObject
+    public class FeatureCollection<T> : GeoJSONObject where T : IFeature
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="FeatureCollection" /> class.
+        ///     Initializes a new instance of the <see cref="FeatureCollection{T}" /> class.
         /// </summary>
-        public FeatureCollection() : this(new List<Feature>())
+        public FeatureCollection() : this(new List<T>())
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="FeatureCollection" /> class.
+        ///     Initializes a new instance of the <see cref="FeatureCollection{T}" /> class.
         /// </summary>
         /// <param name="features">The features.</param>
-        public FeatureCollection(List<Feature> features)
+        public FeatureCollection(IReadOnlyList<T> features)
         {
-            Features = features ?? throw new ArgumentNullException(nameof(features));
+            Features = features?.ToList() ?? throw new ArgumentNullException(nameof(features));
         }
 
         public override GeoJSONObjectType Type => GeoJSONObjectType.FeatureCollection;
@@ -41,6 +43,6 @@ namespace GeoJSON.Net.Feature
         /// </summary>
         /// <value>The features.</value>
         [JsonProperty(PropertyName = "features", Required = Required.Always)]
-        public List<Feature> Features { get; private set; }
+        public IList<T> Features { get; private set; }
     }
 }

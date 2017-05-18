@@ -112,9 +112,9 @@ namespace GeoJSON.Net.Converters
 				case GeoJSONObjectType.GeometryCollection:
 					return value.ToObject<GeometryCollection>();
 				case GeoJSONObjectType.Feature:
-					return value.ToObject<Feature.Feature>();
+					return value.ToObject<Feature<IGeometryObject, object>>();
 				case GeoJSONObjectType.FeatureCollection:
-					return value.ToObject<FeatureCollection>();
+					return value.ToObject<FeatureCollection<IFeature>>();
 				default:
 					throw new NotSupportedException($"Unknown geoJsonType {geoJsonType}");
 			}
