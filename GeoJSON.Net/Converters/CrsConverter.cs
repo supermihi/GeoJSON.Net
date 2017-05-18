@@ -33,7 +33,7 @@ namespace GeoJSON.Net.Converters
         /// <returns>
         ///     The object value.
         /// </returns>
-        /// <exception cref="Newtonsoft.Json.JsonReaderException">
+        /// <exception cref="JsonReaderException">
         ///     CRS must be null or a json object
         ///     or
         ///     CRS must have a "type" property

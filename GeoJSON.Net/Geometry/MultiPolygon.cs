@@ -51,18 +51,11 @@ namespace GeoJSON.Net.Geometry
             {
                 return false;
             }
-
             if (ReferenceEquals(this, obj))
             {
                 return true;
             }
-
-            if (obj.GetType() != GetType())
-            {
-                return false;
-            }
-
-            return Equals((MultiPolygon)obj);
+            return obj.GetType() == GetType() && Equals((MultiPolygon)obj);
         }
 
         public override int GetHashCode()

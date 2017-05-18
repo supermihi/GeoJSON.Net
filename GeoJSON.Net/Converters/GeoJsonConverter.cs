@@ -66,20 +66,20 @@ namespace GeoJSON.Net.Converters
 			serializer.Serialize(writer, value);
 		}
 
-		/// <summary>
-		/// Reads the geo json.
-		/// </summary>
-		/// <param name="value">The value.</param>
-		/// <returns></returns>
-		/// <exception cref="Newtonsoft.Json.JsonReaderException">
-		/// json must contain a "type" property
-		/// or
-		/// type must be a valid geojson object type
-		/// </exception>
-		/// <exception cref="System.NotSupportedException">
-		/// Unknown geoJsonType {geoJsonType}
-		/// </exception>
-		private static IGeoJSONObject ReadGeoJson(JObject value)
+        /// <summary>
+        /// Reads the geo json.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        /// <exception cref="JsonReaderException">
+        /// json must contain a "type" property
+        /// or
+        /// type must be a valid geojson object type
+        /// </exception>
+        /// <exception cref="System.NotSupportedException">
+        /// Unknown geoJsonType {geoJsonType}
+        /// </exception>
+        private static IGeoJSONObject ReadGeoJson(JObject value)
 		{
 			JToken token;
 

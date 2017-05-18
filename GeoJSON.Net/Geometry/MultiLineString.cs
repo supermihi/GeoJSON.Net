@@ -7,9 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeoJSON.Net.Converters;
 using Newtonsoft.Json;
 
 namespace GeoJSON.Net.Geometry
@@ -17,16 +17,22 @@ namespace GeoJSON.Net.Geometry
     /// <summary>
     ///     Defines the <see cref="http://geojson.org/geojson-spec.html#multilinestring">MultiLineString</see> type.
     /// </summary>
-    public class MultiLineString : GeoJSONObject, IGeometryObject
+    public class MultiLineString : GeoJSONObject, IGeometryObject, IEquatable<MultiLineString>
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="MultiLineString" /> class.
         /// </summary>
         /// <param name="coordinates">The coordinates.</param>
-        public MultiLineString(IReadOnlyList<LineString> coordinates)
+        public MultiLineString(IEnumerable<LineString> coordinates)
+            : this(coordinates.Select(l => l.Coordinates))
         {
-            Coordinates = coordinates ?? new LineString[] { };
             
+        }
+
+        [JsonConstructor]
+        public MultiLineString(IEnumerable<IEnumerable<GeographicPosition>> coordinates)
+        {
+            Coordinates = coordinates.Select(s => s.ToArray()).ToArray();
         }
 
         public override GeoJSONObjectType Type => GeoJSONObjectType.MultiLineString;
@@ -36,8 +42,7 @@ namespace GeoJSON.Net.Geometry
         /// </summary>
         /// <value>The Coordinates.</value>
         [JsonProperty(PropertyName = "coordinates", Required = Required.Always)]
-        [JsonConverter(typeof(PolygonConverter))]
-        public IReadOnlyList<LineString> Coordinates { get; }
+        public IReadOnlyList<IReadOnlyList<GeographicPosition>> Coordinates { get; }
 
         public override bool Equals(object obj)
         {
@@ -74,9 +79,9 @@ namespace GeoJSON.Net.Geometry
             return !Equals(left, right);
         }
 
-        private bool Equals(MultiLineString other)
+        public bool Equals(MultiLineString other)
         {
-            return base.Equals(other) && Coordinates.SequenceEqual(other.Coordinates);
+            return base.Equals(other) && Coordinates.SequenceEqual(other.Coordinates, PositonArrayComparer.Instance);
         }
     }
 }

@@ -52,11 +52,11 @@ namespace GeoJSON.Net.Converters
                     return null;
                 case JsonToken.StartObject:
                     var value = JObject.Load(reader);
-                    return ReadGeoJson(value);
+                    return ReadGeoJson(value, serializer);
                 case JsonToken.StartArray:
                     var values = JArray.Load(reader);
                     var geometries = new List<IGeometryObject>(values.Count);
-                    geometries.AddRange(values.Cast<JObject>().Select(ReadGeoJson));
+                    geometries.AddRange(values.Cast<JObject>().Select(o => ReadGeoJson(o, serializer)));
                     return geometries;
             }
 
@@ -79,7 +79,7 @@ namespace GeoJSON.Net.Converters
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns></returns>
-        /// <exception cref="Newtonsoft.Json.JsonReaderException">
+        /// <exception cref="JsonReaderException">
         /// json must contain a "type" property
         /// or
         /// type must be a valid geojson geometry object type
@@ -87,24 +87,22 @@ namespace GeoJSON.Net.Converters
         /// <exception cref="System.NotSupportedException">
         /// Feature and FeatureCollection types are Feature objects and not Geometry objects
         /// </exception>
-        private static IGeometryObject ReadGeoJson(JObject value)
+        private static IGeometryObject ReadGeoJson(JObject value, JsonSerializer serializer = null)
         {
-            JToken token;
 
-            if (!value.TryGetValue("type", StringComparison.OrdinalIgnoreCase, out token))
+            if (!value.TryGetValue("type", StringComparison.OrdinalIgnoreCase, out JToken token))
             {
                 throw new JsonReaderException("json must contain a \"type\" property");
             }
 
-            GeoJSONObjectType geoJsonType;
-
-            if (!Enum.TryParse(token.Value<string>(), true, out geoJsonType))
+            if (!Enum.TryParse(token.Value<string>(), true, out GeoJSONObjectType geoJsonType))
             {
                 throw new JsonReaderException("type must be a valid geojson geometry object type");
             }
 
             switch (geoJsonType)
             {
+                // ReSharper disable RedundantCaseLabel
                 case GeoJSONObjectType.Point:
                     return value.ToObject<Point>();
                 case GeoJSONObjectType.MultiPoint:

@@ -18,22 +18,17 @@ namespace GeoJSON.Net.Geometry
     /// <summary>
     ///     Defines the <see cref="http://geojson.org/geojson-spec.html#geometry-collection">GeometryCollection</see> type.
     /// </summary>
-    public class GeometryCollection : GeoJSONObject, IGeometryObject
+    public class GeometryCollection : GeoJSONObject, IGeometryObject, IEquatable<GeometryCollection>
     {
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="GeometryCollection" /> class.
-        /// </summary>
-        public GeometryCollection() : this(new List<IGeometryObject>())
-        {
-        }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="GeometryCollection" /> class.
         /// </summary>
         /// <param name="geometries">The geometries contained in this GeometryCollection.</param>
-        public GeometryCollection(List<IGeometryObject> geometries)
+        [JsonConstructor]
+        public GeometryCollection(IEnumerable<IGeometryObject> geometries)
         {
-            Geometries = geometries ?? throw new ArgumentNullException(nameof(geometries));
+            Geometries = geometries?.ToArray() ?? throw new ArgumentNullException(nameof(geometries));
             
         }
         public override GeoJSONObjectType Type => GeoJSONObjectType.GeometryCollection;
@@ -64,12 +59,7 @@ namespace GeoJSON.Net.Geometry
                 return true;
             }
 
-            if (obj.GetType() != GetType())
-            {
-                return false;
-            }
-
-            return Equals((GeometryCollection)obj);
+            return obj.GetType() == GetType() && Equals((GeometryCollection)obj);
         }
 
         /// <summary>
@@ -114,7 +104,7 @@ namespace GeoJSON.Net.Geometry
         /// </summary>
         /// <param name="other">The other.</param>
         /// <returns></returns>
-        private bool Equals(GeometryCollection other)
+        public bool Equals(GeometryCollection other)
         {
             return base.Equals(other) && Geometries.SequenceEqual(other.Geometries);
         }
